@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darul Ulum Islamic Institute</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cream': '#F8F4E1',
+                        'sandy-brown': '#AF8F6F',
+                        'rich-brown': '#74512D',
+                        'dark-brown': '#543310',
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    animation: {
+                        fadeInUp: 'fadeInUp 1s ease-in-out',
+                        zoomIn: 'zoomIn 1s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        zoomIn: {
+                            '0%': { opacity: 0, transform: 'scale(0.8)' },
+                            '100%': { opacity: 1, transform: 'scale(1)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS for Scroll Animation and Modal -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Poppins:wght@400;500;700&display=swap');
+        .page-content {
+            display: none;
+        }
+        .page-content.active {
+            display: block;
+        }
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Modal-specific styles */
+        .modal {
+            transition: visibility 0.3s, opacity 0.3s ease-in-out;
+            visibility: hidden;
+            opacity: 0;
+        }
+        .modal.open {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Style for the multiple select input */
+        select[multiple] {
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body class="bg-cream text-rich-brown font-sans">
+
+    <!-- Header and Navigation -->
+    <header class="sticky top-0 z-50 bg-cream shadow-lg">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center transition-all duration-300">
+            <a href="#" class="h-10 md:h-12 w-auto hover:scale-105 transition-transform">
+                <img src="Logo.png" alt="Darul Ulum Institute Logo" class="h-full w-auto">
+            </a>
+            
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="#home" data-page="home" class="nav-link text-dark-brown hover:text-sandy-brown relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-sandy-brown after:transition-all after:duration-300">Home</a>
+                <a href="#about" data-page="about" class="nav-link text-dark-brown hover:text-sandy-brown relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-sandy-brown after:transition-all after:duration-300">About Us</a>
+                <a href="#courses" data-page="courses" class="nav-link text-dark-brown hover:text-sandy-brown relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-sandy-brown after:transition-all after:duration-300">Courses</a>
+                <a href="#admissions" data-page="admissions" class="nav-link text-dark-brown hover:text-sandy-brown relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-sandy-brown after:transition-all after:duration-300">Admissions</a>
+                <a href="#gallery" data-page="gallery" class="nav-link text-dark-brown hover:text-sandy-brown relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-sandy-brown after:transition-all after:duration-300">Gallery</a>
+                <a href="#contact" data-page="contact" class="nav-link text-dark-brown hover:text-sandy-brown relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 hover:after:w-full after:bg-sandy-brown after:transition-all after:duration-300">Contact</a>
+            </div>
+            
+            <!-- Mobile Hamburger Menu -->
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-dark-brown text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream p-4 text-center shadow-md transition-all duration-300 ease-in-out">
+            <a href="#home" data-page="home" class="mobile-nav-link block py-2 text-dark-brown hover:bg-sandy-brown hover:text-cream rounded-md transition-colors">Home</a>
+            <a href="#about" data-page="about" class="mobile-nav-link block py-2 text-dark-brown hover:bg-sandy-brown hover:text-cream rounded-md transition-colors">About Us</a>
+            <a href="#courses" data-page="courses" class="mobile-nav-link block py-2 text-dark-brown hover:bg-sandy-brown hover:text-cream rounded-md transition-colors">Courses</a>
+            <a href="#admissions" data-page="admissions" class="mobile-nav-link block py-2 text-dark-brown hover:bg-sandy-brown hover:text-cream rounded-md transition-colors">Admissions</a>
+            <a href="#gallery" data-page="gallery" class="mobile-nav-link block py-2 text-dark-brown hover:bg-sandy-brown hover:text-cream rounded-md transition-colors">Gallery</a>
+            <a href="#contact" data-page="contact" class="mobile-nav-link block py-2 text-dark-brown hover:bg-sandy-brown hover:text-cream rounded-md transition-colors">Contact</a>
+        </div>
+    </header>
+
+    <main class="min-h-screen">
+        <!-- Home Page Section -->
+        <section data-page="home" class="page-content active">
+            <!-- Hero Section -->
+            <div class="w-full min-h-screen flex items-center justify-center bg-cream p-4 md:p-8">
+                <div class="max-w-4xl mx-auto text-center animate-[fadeInUp_1s_ease-in-out]">
+                    <h1 class="text-4xl md:text-6xl font-serif font-bold mb-4 md:mb-6 leading-tight text-dark-brown">Darul Ulum Islamic Institute</h1>
+                    <p class="text-lg md:text-xl font-light mb-8 text-rich-brown max-w-2xl mx-auto">A trusted institution of religious education along with general education.</p>
+                    <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#" data-page="admissions" class="page-link inline-block bg-rich-brown text-cream px-8 py-4 rounded-full font-bold shadow-lg hover:bg-dark-brown transition-colors duration-300">Enroll Now</a>
+                        <a href="#" data-page="courses" class="page-link inline-block border-2 border-rich-brown text-rich-brown px-8 py-4 rounded-full font-bold hover:bg-rich-brown hover:text-cream transition-colors duration-300">Explore Courses</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Our Vision & Mission Section (Two Cards) -->
+            <div class="container mx-auto px-4 py-16 text-center animate-on-scroll">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown mb-4">Our Vision & Mission</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-12"></div>
+                <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <!-- Vision Card -->
+                    <div class="bg-sandy-brown/30 p-8 rounded-xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h3 class="text-2xl font-bold text-dark-brown mb-4">Our Vision</h3>
+                        <p class="text-lg text-rich-brown leading-relaxed">
+                            To be a leading center of Islamic scholarship and spiritual development, empowering individuals to be exemplary Muslims and contributing members of society.
+                        </p>
+                    </div>
+                    <!-- Mission Card -->
+                    <div class="bg-sandy-brown/30 p-8 rounded-xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h3 class="text-2xl font-bold text-dark-brown mb-4">Our Mission</h3>
+                        <p class="text-lg text-rich-brown leading-relaxed">
+                            To provide comprehensive and authentic Islamic education through a rigorous curriculum, fostering an environment of moral integrity, intellectual curiosity, and community service. We strive to graduate students who are deeply rooted in their faith and equipped to navigate the complexities of the modern world with wisdom and compassion.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Choose Us Section -->
+            <div class="bg-sandy-brown py-16">
+                <div class="container mx-auto px-4 text-center">
+                    <h2 class="text-4xl font-serif font-bold text-cream mb-4 animate-on-scroll">Why Choose Us?</h2>
+                    <div class="h-1 w-20 bg-cream mx-auto rounded-full mb-12"></div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="flex flex-col items-center animate-on-scroll">
+                            <i class="fas fa-quran text-5xl text-dark-brown mb-4"></i>
+                            <h3 class="text-2xl font-bold text-dark-brown mb-2">Authentic Knowledge</h3>
+                            <p class="text-cream text-center">Taught by qualified and respected scholars in a traditional yet modern environment.</p>
+                        </div>
+                        <div class="flex flex-col items-center animate-on-scroll">
+                            <i class="fas fa-user-friends text-5xl text-dark-brown mb-4"></i>
+                            <h3 class="text-2xl font-bold text-dark-brown mb-2">Community Focus</h3>
+                            <p class="text-cream text-center">A supportive and welcoming community that fosters personal growth and brotherhood.</p>
+                        </div>
+                        <div class="flex flex-col items-center animate-on-scroll">
+                            <i class="fas fa-graduation-cap text-5xl text-dark-brown mb-4"></i>
+                            <h3 class="text-2xl font-bold text-dark-brown mb-2">Holistic Education</h3>
+                            <p class="text-cream text-center">We balance academic excellence with spiritual and moral development for a complete education.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- By the Numbers Section -->
+            <div class="container mx-auto px-4 py-16 text-center">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown mb-4 animate-on-scroll">By the Numbers</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-8"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <i class="fas fa-users text-5xl text-dark-brown mb-4"></i>
+                        <p class="text-5xl font-bold text-dark-brown mb-2">150+</p>
+                        <p class="text-xl text-rich-brown">Students Enrolled</p>
+                    </div>
+                    <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <i class="fas fa-chalkboard-teacher text-5xl text-dark-brown mb-4"></i>
+                        <p class="text-5xl font-bold text-dark-brown mb-2">25+</p>
+                        <p class="text-xl text-rich-brown">Dedicated Teachers</p>
+                    </div>
+                    <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <i class="fas fa-star text-5xl text-dark-brown mb-4"></i>
+                        <p class="text-5xl font-bold text-dark-brown mb-2">5+</p>
+                        <p class="text-xl text-rich-brown">Years of Excellence</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- About Page Section -->
+        <section data-page="about" class="page-content hidden py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown text-center mb-4 animate-on-scroll">Our History & Vision</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-8 animate-on-scroll"></div>
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-1/2 animate-on-scroll">
+                        <img src="https://placehold.co/800x600/74512D/F8F4E1?text=Darul+Ulum+Campus" alt="Institute Campus" class="rounded-xl shadow-lg w-full">
+                    </div>
+                    <div class="md:w-1/2 leading-relaxed animate-on-scroll">
+                        <p class="text-lg mb-6">Established in [Year], Darul Ulum Islamic Institute was founded on the principle of reviving and preserving classical Islamic education in a contemporary context. Our founders envisioned a place where students could master the sacred sciences while developing a profound understanding of their role in modern society.</p>
+                        <p class="text-lg mb-6">Today, we continue that legacy by offering a rigorous curriculum that includes Quranic studies, Hadith, Tafsir, Arabic language, alongside essential modern subjects. Our vision is to empower a new generation of Muslim leaders, teachers, and professionals who are confident in their faith and capable of serving humanity.</p>
+                        <p class="text-lg mb-6">We are committed to fostering a culture of mutual respect, intellectual curiosity, and spiritual discipline. Our doors are open to all who seek knowledge and a deeper connection to the teachings of Islam.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses Page Section -->
+        <section data-page="courses" class="page-content hidden py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown text-center mb-4 animate-on-scroll">Our Educational Programs</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-8 animate-on-scroll"></div>
+                
+                <!-- General Section -->
+                <h3 class="text-3xl font-bold text-dark-brown mb-6 text-center md:text-left">General Section</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-12">
+                    <!-- General Class Cards -->
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-1</h4>
+                        <p class="text-rich-brown leading-relaxed">Foundation of Islamic and general studies, focusing on basic literacy, numeracy, and foundational Islamic concepts.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-2</h4>
+                        <p class="text-rich-brown leading-relaxed">Building on foundational knowledge with more advanced reading and arithmetic, and deeper Quranic studies.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-3</h4>
+                        <p class="text-rich-brown leading-relaxed">Introduction to elementary sciences, social studies, and memorization of short Surahs and Hadiths.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-4</h4>
+                        <p class="text-rich-brown leading-relaxed">Developing critical thinking skills through applied mathematics and comprehensive religious lessons.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-5</h4>
+                        <p class="text-rich-brown leading-relaxed">Intermediate level of general subjects, with a focus on Islamic history and the lives of the Prophets.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-6</h4>
+                        <p class="text-rich-brown leading-relaxed">Preparation for higher-level studies, integrating secular and religious knowledge for a holistic approach to education.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-7</h4>
+                        <p class="text-rich-brown leading-relaxed">Advanced topics in science and mathematics, paired with in-depth studies of Fiqh and Islamic jurisprudence.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-8</h4>
+                        <p class="text-rich-brown leading-relaxed">Comprehensive curriculum designed to prepare students for national examinations and higher education.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Class-9</h4>
+                        <p class="text-rich-brown leading-relaxed">Final year of the general program, solidifying knowledge across all subjects with a focus on practical application and ethical development.</p>
+                    </div>
+                </div>
+
+                <!-- Arabic Section -->
+                <h3 class="text-3xl font-bold text-dark-brown mb-6 text-center md:text-left">Arabic Section (Seven Classes)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <!-- Arabic Class Cards -->
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Nurani Maktab</h4>
+                        <p class="text-rich-brown leading-relaxed">The very first step for learning to read the Quran with proper pronunciation and rules of Tajweed.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Qira'at</h4>
+                        <p class="text-rich-brown leading-relaxed">Focus on advanced recitation methods and the different schools of thought in Quranic reading.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Sarf (Morphology)</h4>
+                        <p class="text-rich-brown leading-relaxed">The study of Arabic word patterns and root derivations, essential for understanding the language.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Nahw (Grammar)</h4>
+                        <p class="text-rich-brown leading-relaxed">An in-depth study of Arabic syntax and sentence structure to comprehend classical texts.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Mantiq (Logic)</h4>
+                        <p class="text-rich-brown leading-relaxed">Introduction to classical logic as a tool for clear reasoning and theological discourse.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Balagha (Rhetoric)</h4>
+                        <p class="text-rich-brown leading-relaxed">The art of eloquent expression and persuasive communication in the Arabic language.</p>
+                    </div>
+                    <div class="bg-sandy-brown/30 p-8 rounded-2xl shadow-lg transition-transform hover:scale-105 animate-on-scroll">
+                        <h4 class="text-2xl font-serif font-bold text-dark-brown mb-3">Kafiya</h4>
+                        <p class="text-rich-brown leading-relaxed">A comprehensive and advanced level of Arabic grammar, building on previous studies.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admissions Page Section -->
+        <section data-page="admissions" class="page-content hidden py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown text-center mb-4 animate-on-scroll">Admissions</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-8 animate-on-scroll"></div>
+                
+                <div class="max-w-4xl mx-auto bg-sandy-brown/30 p-8 rounded-xl shadow-lg animate-on-scroll">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-serif font-bold text-dark-brown">Application Form</h3>
+                    </div>
+                    
+                    <!-- Web3Forms Application Form -->
+                    <form id="application-form" action="https://api.web3forms.com/submit" method="POST">
+                        <input type="hidden" name="access_key" value="88415589-ba8d-4658-aa0e-0adc8e1ac287">
+                        
+                        <!-- Honeypot Spam Protection -->
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+                        
+                        <!-- Personal Information -->
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold text-dark-brown mb-4">1. Personal Information</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="fullName" class="block text-rich-brown font-medium mb-1">Full Name</label>
+                                    <input type="text" id="fullName" name="Full Name" required class="w-full p-3 rounded-lg border-2 border-sandy-brown bg-cream focus:outline-none focus:border-dark-brown transition-colors">
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-rich-brown font-medium mb-1">Email Address</label>
+                                    <input type="email" id="email" name="Email Address" required class="w-full p-3 rounded-lg border-2 border-sandy-brown bg-cream focus:outline-none focus:border-dark-brown transition-colors">
+                                </div>
+                                <div>
+                                    <label for="phoneNumber" class="block text-rich-brown font-medium mb-1">Phone Number</label>
+                                    <input type="tel" id="phoneNumber" name="Phone Number" required class="w-full p-3 rounded-lg border-2 border-sandy-brown bg-cream focus:outline-none focus:border-dark-brown transition-colors">
+                                </div>
+                                <div>
+                                    <label for="address" class="block text-rich-brown font-medium mb-1">Full Address</label>
+                                    <input type="text" id="address" name="Full Address" required class="w-full p-3 rounded-lg border-2 border-sandy-brown bg-cream focus:outline-none focus:border-dark-brown transition-colors">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Educational Background -->
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold text-dark-brown mb-4">2. Educational Background</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="previousSchool" class="block text-rich-brown font-medium mb-1">Previous School</label>
+                                    <input type="text" id="previousSchool" name="Previous School" required class="w-full p-3 rounded-lg border-2 border-sandy-brown bg-cream focus:outline-none focus:border-dark-brown transition-colors">
+                                </div>
+                                
+                                <!-- Desired Courses Radio Button Group (Updated Stylish Version) -->
+                                <div>
+                                    <label class="block text-rich-brown font-medium mb-1">Desired Courses</label>
+                                    <div class="p-4 rounded-lg border-2 border-sandy-brown bg-cream space-y-6">
+                                        <!-- General Section -->
+                                        <div>
+                                            <h5 class="text-lg font-bold text-dark-brown mb-3 flex items-center">
+                                                <i class="fas fa-book-open text-sandy-brown mr-3"></i>
+                                                General Section (Choose One)
+                                            </h5>
+                                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-1" name="GeneralCourse" value="Class-1" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-1</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-2" name="GeneralCourse" value="Class-2" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-2</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-3" name="GeneralCourse" value="Class-3" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-3</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-4" name="GeneralCourse" value="Class-4" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-4</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-5" name="GeneralCourse" value="Class-5" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-5</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-6" name="GeneralCourse" value="Class-6" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-6</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-7" name="GeneralCourse" value="Class-7" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-7</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-8" name="GeneralCourse" value="Class-8" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-8</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="class-9" name="GeneralCourse" value="Class-9" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Class-9</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Arabic Section -->
+                                        <div>
+                                            <h5 class="text-lg font-bold text-dark-brown mb-3 flex items-center">
+                                                <i class="fas fa-mosque text-sandy-brown mr-3"></i>
+                                                Arabic Section (Choose One)
+                                            </h5>
+                                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="nurani-maktab" name="ArabicCourse" value="Nurani Maktab" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Nurani Maktab</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="qiraat" name="ArabicCourse" value="Qira'at" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Qira'at</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="sarf" name="ArabicCourse" value="Sarf (Morphology)" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Sarf</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="nahw" name="ArabicCourse" value="Nahw (Grammar)" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Nahw</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="mantiq" name="ArabicCourse" value="Mantiq (Logic)" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Mantiq</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="balagha" name="ArabicCourse" value="Balagha (Rhetoric)" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Balagha</p>
+                                                    </div>
+                                                </label>
+                                                <label class="relative block cursor-pointer transition-all duration-300">
+                                                    <input type="radio" id="kafiya" name="ArabicCourse" value="Kafiya" class="hidden peer">
+                                                    <div class="bg-sandy-brown/20 p-4 rounded-lg shadow-sm text-center transform transition-all duration-300 peer-checked:bg-rich-brown peer-checked:text-cream peer-checked:scale-105 hover:bg-sandy-brown/40">
+                                                        <p class="font-semibold">Kafiya</p>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Declaration -->
+                        <div class="mb-6">
+                            <h4 class="text-xl font-bold text-dark-brown mb-4">3. Declaration</h4>
+                            <div class="flex items-start">
+                                <input type="checkbox" id="declaration" name="Declaration" required class="h-5 w-5 rounded-md border-sandy-brown text-dark-brown focus:ring-dark-brown">
+                                <label for="declaration" class="ml-3 text-rich-brown leading-snug">I declare that the information provided in this form is true and correct to the best of my knowledge.</label>
+                            </div>
+                        </div>
+
+                        <!-- Submission Button -->
+                        <div class="flex justify-center md:justify-start mt-8">
+                            <button type="submit" class="bg-rich-brown text-cream px-8 py-3 rounded-full font-bold shadow-lg hover:bg-dark-brown transition-colors">Submit Application</button>
+                        </div>
+                        
+                        <!-- Display message to the user -->
+                        <div id="status-message" class="mt-8 text-center text-lg font-bold"></div>
+                        
+                        <!-- Link to original modal functionality -->
+                        <p class="mt-8 text-center text-lg text-rich-brown">
+                             For all other inquiries, please use our <a href="#" id="apply-button" class="underline text-dark-brown hover:text-sandy-brown">Apply</a> button to send us a message.
+                        </p>
+                        
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Page Section -->
+        <section data-page="gallery" class="page-content hidden py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown text-center mb-4 animate-on-scroll">Our Moments</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-8 animate-on-scroll"></div>
+                <p class="max-w-3xl mx-auto text-xl leading-relaxed text-rich-brown text-center mb-12 animate-on-scroll">
+                    A collection of images capturing the spirit, community, and beauty of life at Darul Ulum Islamic Institute.
+                </p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                    <!-- Image Card 1 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/74512D/F8F4E1?text=Classroom+Study" alt="Students in a classroom" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                             <p class="text-lg font-bold">Classroom Study</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 2 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/AF8F6F/F8F4E1?text=Outdoor+Prayer" alt="Outdoor Prayer" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                             <p class="font-bold">Outdoor Prayer</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 3 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/543310/F8F4E1?text=Community+Gathering" alt="Community gathering" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <p class="text-lg font-bold">Community Gathering</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 4 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/AF8F6F/F8F4E1?text=Library+Reading" alt="Student reading in the library" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <p class="text-lg font-bold">Library Reading</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 5 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/74512D/F8F4E1?text=Graduation+Ceremony" alt="Graduation ceremony" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <p class="text-lg font-bold">Graduation Ceremony</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 6 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/543310/F8F4E1?text=Islamic+Art+Class" alt="Students in an Islamic art class" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <p class="text-lg font-bold">Islamic Art Class</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 7 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/AF8F6F/F8F4E1?text=Spiritual+Reflection" alt="Person reflecting spiritually" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <p class="text-lg font-bold">Spiritual Reflection</p>
+                        </div>
+                    </div>
+                    <!-- Image Card 8 -->
+                    <div class="relative overflow-hidden rounded-xl shadow-lg group animate-on-scroll">
+                        <img src="https://placehold.co/600x400/74512D/F8F4E1?text=Class+Discussion" alt="Students having a class discussion" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-brown/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-4 text-cream translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                            <p class="text-lg font-bold">Class Discussion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page Section -->
+        <section data-page="contact" class="page-content hidden py-16">
+            <div class="container mx-auto px-4">
+                <h2 class="text-4xl font-serif font-bold text-dark-brown text-center mb-4 animate-on-scroll">Contact Us</h2>
+                <div class="h-1 w-20 bg-sandy-brown mx-auto rounded-full mb-8 animate-on-scroll"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                    <!-- Campus One Details -->
+                    <div class="space-y-8 animate-on-scroll">
+                        <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg">
+                            <h3 class="text-2xl font-serif font-bold text-dark-brown mb-4">Main Campus</h3>
+                            <ul class="space-y-4 text-lg text-rich-brown">
+                                <li class="flex items-center">
+                                    <i class="fas fa-map-marker-alt text-dark-brown mr-3"></i>
+                                    123 Madinah Street, Islamic City, Global
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-phone-alt text-dark-brown mr-3"></i>
+                                    +1 (123) 456-7890 (Main)
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-phone-alt text-dark-brown mr-3"></i>
+                                    +1 (123) 456-7891 (Admissions)
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-phone-alt text-dark-brown mr-3"></i>
+                                    +1 (123) 456-7892 (General Inquiries)
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-envelope text-dark-brown mr-3"></i>
+                                    info@darululum.com
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fab fa-facebook text-dark-brown mr-3"></i>
+                                    <a href="#" class="text-rich-brown hover:underline">Follow us on Facebook</a>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fab fa-whatsapp text-dark-brown mr-3"></i>
+                                    <a href="tel:+11234567893" class="text-rich-brown hover:underline">Message us on WhatsApp</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Campus Two Details -->
+                    <div class="space-y-8 animate-on-scroll">
+                        <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg">
+                            <h3 class="text-2xl font-serif font-bold text-dark-brown mb-4">Satellite Campus</h3>
+                            <ul class="space-y-4 text-lg text-rich-brown">
+                                <li class="flex items-center">
+                                    <i class="fas fa-map-marker-alt text-dark-brown mr-3"></i>
+                                    456 Al-Aqsa Avenue, Faith City, Global
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-phone-alt text-dark-brown mr-3"></i>
+                                    +1 (123) 456-7890 (Main)
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-phone-alt text-dark-brown mr-3"></i>
+                                    +1 (123) 456-7891 (Admissions)
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-envelope text-dark-brown mr-3"></i>
+                                    info@darululum.com
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fab fa-facebook text-dark-brown mr-3"></i>
+                                    <a href="#" class="text-rich-brown hover:underline">Follow us on Facebook</a>
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fab fa-whatsapp text-dark-brown mr-3"></i>
+                                    <a href="tel:+11234567893" class="text-rich-brown hover:underline">Message us on WhatsApp</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto space-y-8 animate-on-scroll mt-8">
+                    <!-- Main Campus Map -->
+                    <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-serif font-bold text-dark-brown mb-4">Main Campus Location</h3>
+                        <div class="w-full rounded-lg overflow-hidden shadow-lg">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d256.1594764939885!2d90.35490144415627!3d23.768925151926773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c13000d76d37%3A0xea9e4ebabd027fc3!2sDarul%20Uloom%20Islamic%20Institute!5e0!3m2!1sen!2sbd!4v1756603402838!5m2!1sen!2sbd"
+                                width="100%"
+                                height="320"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                    <!-- Satellite Campus Map -->
+                    <div class="p-8 bg-sandy-brown/30 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-serif font-bold text-dark-brown mb-4">Satellite Campus Location</h3>
+                        <div class="w-full rounded-lg overflow-hidden shadow-lg">
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d228.21356721803127!2d90.35523716345463!3d23.768157999751068!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1756601212328!5m2!1sen!2sbd"
+                                width="100%"
+                                height="320"
+                                style="border:0;"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark-brown text-cream py-16">
+            <div class="container mx-auto px-4 text-center">
+                <h3 class="text-4xl font-serif font-bold mb-4">Darul Ulum</h3>
+                <p class="mb-8 max-w-2xl mx-auto">Committed to providing a comprehensive and authentic Islamic education for the betterment of our community.</p>
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="#" class="text-2xl hover:text-sandy-brown transition-colors"><i class="fab fa-d"></i></a>
+                    <a href="#" class="text-2xl hover:text-sandy-brown transition-colors"><i class="fab fa-u"></i></a>
+                    <a href="#" class="text-2xl hover:text-sandy-brown transition-colors"><i class="fab fa-i"></i></a>
+                    <a href="#" class="text-2xl hover:text-sandy-brown transition-colors"><i class="fab fa-i"></i></a>
+                </div>
+                <div class="h-[1px] bg-sandy-brown/50 w-full mx-auto my-8"></div>
+                <p class="text-sm text-sandy-brown">&copy; 2025 Darul Ulum Islamic Institute. All rights reserved.</p>
+            </div>
+        </footer>
+
+        <!-- Floating Message Window (Modal) -->
+        <div id="application-modal" class="modal fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <!-- Modal Overlay -->
+            <div class="absolute inset-0 bg-dark-brown opacity-80"></div>
+
+            <!-- Modal Content -->
+            <div class="relative bg-cream p-8 rounded-xl shadow-2xl max-w-sm w-full mx-auto text-center animate-[fadeInUp_0.5s_ease-in-out]">
+                <button id="close-modal-btn" class="absolute top-4 right-4 text-rich-brown hover:text-dark-brown text-3xl transition-colors">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+                <i class="fas fa-handshake text-6xl text-dark-brown mb-4"></i>
+                <h3 class="text-3xl font-serif font-bold text-dark-brown mb-2">A Message for You</h3>
+                <p class="text-rich-brown mb-6">Assalamu Alaikum Muhtaram, JazakAllah khair for showing interest in our institution. If you’d like to discuss admissions or have any other queries, please feel free to reach out to us anytime.</p>
+                <button id="message-to-contact-btn" data-page="contact" class="page-link bg-rich-brown text-cream px-8 py-3 rounded-full font-bold shadow-lg hover:bg-dark-brown transition-colors">Contact Us</button>
+            </div>
+        </div>
+        
+        <!-- JavaScript for page switching and animations -->
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+            import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+            import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+            
+            // Firebase global variables setup
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+            
+            let app, db, auth, userId;
+            
+            // UI elements
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link, .page-link');
+            const pages = document.querySelectorAll('.page-content');
+            
+            // Modal elements
+            const applyButton = document.getElementById('apply-button');
+            const applicationModal = document.getElementById('application-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const messageToContactBtn = document.getElementById('message-to-contact-btn');
+            
+            // Web3Forms Form elements
+            const applicationForm = document.getElementById('application-form');
+            const statusMessageEl = document.getElementById('status-message');
+            
+            // Function to show a specific page and hide others
+            const showPage = (pageId) => {
+                pages.forEach(page => {
+                    if (page.dataset.page === pageId) {
+                        page.classList.add('active');
+                        page.classList.remove('hidden');
+                    } else {
+                        page.classList.add('hidden');
+                        page.classList.remove('active');
+                    }
+                });
+                // Hide mobile menu after selection
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+                // Scroll to the top of the page
+                window.scrollTo(0, 0);
+            };
+            
+            // Handle Web3Forms submission
+            const submitForm = async (event) => {
+                event.preventDefault();
+                const form = event.target;
+                const data = new FormData(form);
+                
+                // Get the value of the selected radio button for each group
+                const generalCourse = document.querySelector('input[name="GeneralCourse"]:checked')?.value || 'Not selected';
+                const arabicCourse = document.querySelector('input[name="ArabicCourse"]:checked')?.value || 'Not selected';
+                
+                // Add selected courses to form data
+                data.append('Selected Courses', `General: ${generalCourse}, Arabic: ${arabicCourse}`);
+                
+                statusMessageEl.textContent = 'Submitting...';
+                statusMessageEl.classList.remove('text-red-500', 'text-green-500');
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: data,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        statusMessageEl.textContent = result.message || 'Application submitted successfully! JazakAllah Khair.';
+                        statusMessageEl.classList.add('text-green-500');
+                        form.reset();
+                    } else {
+                        statusMessageEl.textContent = result.message || 'Failed to submit application. Please try again.';
+                        statusMessageEl.classList.add('text-red-500');
+                    }
+                } catch (error) {
+                    console.error("Error submitting form:", error);
+                    statusMessageEl.textContent = 'Failed to submit application. Please check your network and try again.';
+                    statusMessageEl.classList.add('text-red-500');
+                }
+            };
+
+            // Event listener for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.page;
+                    showPage(pageId);
+                });
+            });
+
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Intersection Observer for scroll animations
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.animate-on-scroll').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Show message modal on apply button click
+            applyButton.addEventListener('click', () => {
+                applicationModal.classList.add('open');
+            });
+
+            // Hide message modal on close button click or overlay click
+            closeModalBtn.addEventListener('click', () => {
+                applicationModal.classList.remove('open');
+            });
+            applicationModal.addEventListener('click', (e) => {
+                if (e.target === applicationModal) {
+                    applicationModal.classList.remove('open');
+                }
+            });
+            
+            // Open contact section from message modal
+            messageToContactBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = messageToContactBtn.dataset.page;
+                applicationModal.classList.remove('open');
+                showPage(pageId);
+            });
+            
+            // Form button event listener
+            applicationForm.addEventListener('submit', submitForm);
+            
+            
+        </script>
+
+</body>
+</html>
